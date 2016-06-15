@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: pttg-family-migration-ui
+  name: pttg-family-migration-ui
+spec:
+  type: NodePort
+  ports:
+  - name: https
+    port: 443
+    containerPort: https
+    nodePort: ${pttg_family_migration_ui_port}
+  selector:
+    name: pttg-family-migration-ui
