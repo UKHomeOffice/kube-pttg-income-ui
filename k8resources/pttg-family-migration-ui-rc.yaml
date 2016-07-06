@@ -20,7 +20,7 @@ spec:
           - name: PROXY_SERVICE_HOST
             value: '127.0.0.1'
           - name: PROXY_SERVICE_PORT
-            value: '8080'
+            value: '8000'
           - name: LOAD_BALANCER_CIDR
             value: '10.50.0.0/22'
           - name: NAXSI_USE_DEFAULT_RULES
@@ -31,7 +31,7 @@ spec:
           - name: https
             containerPort: 443
       - name: pttg-family-migration-ui
-        image: quay.io/ukhomeofficedigital/pttg-family-migration-ui:0.1.0
+        image: quay.io/ukhomeofficedigital/pttg-income-proving-ui:${pt-income-version}
         resources:
           limits:
             cpu: 200m
@@ -41,5 +41,5 @@ spec:
             memory: 1024Mi
         ports:
           - name: http
-            containerPort: 8080
+            containerPort: 8000
         imagePullPolicy: Always
