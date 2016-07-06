@@ -31,7 +31,7 @@ spec:
           - name: https
             containerPort: 443
       - name: pttg-family-migration-ui
-        image: quay.io/ukhomeofficedigital/pttg-family-migration-ui:0.1.0
+        image: quay.io/ukhomeofficedigital/pttg-income-proving-ui:${pt-income-version}
         resources:
           limits:
             cpu: 200m
