@@ -10,6 +10,6 @@ spec:
   - name: https
     port: 443
     containerPort: https
-    nodePort: ${pttg_family_migration_ui_port}
+    nodePort: ${pttg_income_proving_ui_port}
   selector:
     name: pttg-income-proving-ui
