@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: ReplicationController
 metadata:
@@ -16,6 +17,52 @@ spec:
         version: ${pt-income-version}
     spec:
       containers:
+      - name: vault-sidekick
+        image: quay.io/ukhomeofficedigital/vault-sidekick:v0.2.0
+        imagePullPolicy: Always
+        resources:
+         limits:
+          memory: "100Mi"
+          cpu: 100m
+         requests:
+          memory: "50Mi"
+          cpu: 100m
+        args:
+          - -output=/etc/nginx/secrets
+          - -tls-skip-verify=true
+          - -cn=pki:services/${NAMESPACE}/pki/issue/default:common_name=pttg-income-proving-ui.${NAMESPACE}.svc.cluster.local,file=/etc/nginx/secrets/pttg-income-proving-ui,fmt=bundle
+        env:
+          - name: VAULT_ADDR
+            value: "https://vault.vault.svc.cluster.local:8200"
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: VAULT_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: store-token
+                key: token
+        volumeMounts:
+          - mountPath: /etc/nginx/secrets
+            name: secrets
+      - name: toolbox
+        image: quay.io/ukhomeofficedigital/toolbox:v0.0.1
+        imagePullPolicy: Always
+        resources:
+         limits:
+          memory: "100Mi"
+          cpu: 100m
+         requests:
+          memory: "50Mi"
+          cpu: 50m
+        command:
+          - sleep
+          - "3600"
+        volumeMounts:
+          - name: secrets
+            mountPath: /etc/nginx/secrets
+            readOnly: true
       - name: proxy
         image: quay.io/ukhomeofficedigital/nginx-proxy:v1.1.5
         env:
@@ -29,9 +76,50 @@ spec:
             value: 'FALSE'
           - name: ENABLE_UUID_PARAM
             value: 'FALSE'
+          - name: HTTPS_REDIRECT
+            value: 'FALSE'
+          - name: SERVER_CERT
+            value: /etc/nginx/secrets/pttg-income-proving-ui-bundle.pem
+          - name: SERVER_KEY
+            value: /etc/nginx/secrets/pttg-income-proving-ui-key.pem
+        volumeMounts:
+          - name: secrets
+            mountPath: /etc/nginx/secrets
+            readOnly: true
         ports:
           - name: https
             containerPort: 443
+          - name: http
+            containerPort: 80
+      - name: vaultjks
+        image: quay.io/ukhomeofficedigital/vaultjks:v0.1.0
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "100Mi"
+          requests:
+            memory: "50Mi"
+        env:
+          - name: VAULT_ADDR
+            value: "https://vault.vault.svc.cluster.local:8200"
+          - name: VAULT_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: store-token
+                key: token
+          - name: VAULT_PKI_PATH
+            value: services/pt-i-dev/pki
+          - name: VAULT_ROLE_NAME
+            value: default
+          - name: SLEEP_FOREVER
+            value: "true"
+          - name: IP_SAN
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        volumeMounts:
+          - mountPath: /data
+            name: javapki
       - name: pttg-income-proving-ui
         image: quay.io/ukhomeofficedigital/pttg-income-proving-ui:${pt-income-version}
         resources:
@@ -45,3 +133,14 @@ spec:
           - name: http
             containerPort: 8000
         imagePullPolicy: Always
+        volumeMounts:
+          - mountPath: /data
+            name: javapki
+            readOnly: true
+      volumes:
+      - name: secrets
+        emptyDir:
+          medium: "Memory"
+      - name: javapki
+        emptyDir:
+          medium: "Memory"
