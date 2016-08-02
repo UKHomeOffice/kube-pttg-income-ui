@@ -76,6 +76,8 @@ spec:
             value: 'FALSE'
           - name: ENABLE_UUID_PARAM
             value: 'FALSE'
+          - name: HTTPS_REDIRECT
+            value: 'FALSE'
           - name: SERVER_CERT
             value: /etc/nginx/secrets/pttg-income-proving-ui-bundle.pem
           - name: SERVER_KEY
