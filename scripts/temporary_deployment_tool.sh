@@ -18,7 +18,7 @@ SVC_NODE_PORT_FILE='environments/dev.yaml'
 function rc() {
   echo "=== deploying RC: ${RC}"
   sed -i 's|${.*pt-income-version.*}|'"${VERSION}"'|g' ${RCFILE}
-  sed -i 's|${.*ptincome_port.*}|'"$SVC_NODE_PORT"'|g' $SVCFILE
+  sed -i 's|${.*pttg_income_proving_ui_port.*}|'"$SVC_NODE_PORT"'|g' $SVCFILE
   ./kubectl ${KUBECTL_FLAGS} get ${RC} 2>&1 |grep -q "not found"
   if [[ $? -eq 1 ]];
   then
@@ -85,7 +85,7 @@ function svc(){
   SVC_NODE_PORT=$((${SVC_NODE_PORT} + 0))
 
   echo "=== deploying SVC: ${SVC}"
-  sed -i 's|${.*ptincome_port.*}|'"$SVC_NODE_PORT"'|g' $SVCFILE
+  sed -i 's|${.*pttg_income_proving_ui_port.*}|'"$SVC_NODE_PORT"'|g' $SVCFILE
   ./kubectl ${KUBECTL_FLAGS} get ${SVC} 2>&1 |grep -q "not found"
   if [[ $? -eq 1 ]];
   then
