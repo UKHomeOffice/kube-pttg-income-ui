@@ -9,7 +9,7 @@ spec:
   ports:
   - name: https
     port: 443
-    containerPort: https
+    targetPort: https
     nodePort: ${pttg_income_proving_ui_port}
   selector:
     name: pttg-income-proving-ui
