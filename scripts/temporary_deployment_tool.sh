@@ -86,18 +86,14 @@ function svc(){
 
   echo "=== deploying SVC: ${SVC}"
   sed -i 's|${.*pttg_income_proving_ui_port.*}|'"$SVC_NODE_PORT"'|g' $SVCFILE
-  ./kubectl ${KUBECTL_FLAGS} get ${SVC} 2>&1 |grep -q "not found"
-  if [[ $? -eq 1 ]];
-  then
-      echo "=== updating the ${APPNAME} SVC ..."
-      ./kubectl ${KUBECTL_FLAGS} delete ${SVC}
+  if ./kubectl ${KUBECTL_FLAGS} get ${SVC} 2>&1 |grep -q "not found"; then
+    echo "=== ${APPNAME} SVC doesn't exist, creating the service ..."
+    ./kubectl ${KUBECTL_FLAGS} create -f ${SVCFILE}
   else
-      echo "=== ${APPNAME} SVC doesn't exist, therefore I don't need to update it, moving on ..."
+    echo "=== ${APPNAME} SVC exists, moving on ..."
   fi
-  ./kubectl ${KUBECTL_FLAGS} create -f ${SVCFILE}
   echo "=== current status of the SVC ${SVC} : "
   kubectl ${KUBECTL_FLAGS} describe ${SVC}
-
 }
 
 # main
