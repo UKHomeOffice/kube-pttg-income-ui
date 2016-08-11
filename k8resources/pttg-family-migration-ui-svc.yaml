@@ -10,6 +10,6 @@ spec:
   - name: https
     port: 443
     targetPort: https
-    nodePort: ${pttg_income_proving_ui_port}
+    nodePort: 30700
   selector:
     name: pttg-income-proving-ui
