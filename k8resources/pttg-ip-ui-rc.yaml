@@ -122,6 +122,9 @@ spec:
             name: javapki
       - name: pttg-ip-ui
         image: quay.io/ukhomeofficedigital/pttg-ip-ui:${pt-income-version}
+        env:
+         - name: API_ROOT
+           value: "http://pttg-ip-api.pt-i-dev.svc.cluster.local"
         resources:
           limits:
             cpu: 200m
