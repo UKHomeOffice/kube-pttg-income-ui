@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    name: pttg-ip-ui
-  name: pttg-ip-ui
+    name: pttg-ip-gt-ui
+  name: pttg-ip-gt-ui
 spec:
   type: NodePort
   ports:
@@ -12,4 +12,4 @@ spec:
     targetPort: https
     nodePort: ${pttg_income_proving_ui_port}
   selector:
-    name: pttg-ip-ui
+    name: pttg-ip-gt-ui
