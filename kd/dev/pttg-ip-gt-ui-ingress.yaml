@@ -1,0 +1,29 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    ingress.kubernetes.io/secure-backends: "true"
+  name: pttg-ip-gt-ui
+spec:
+  rules:
+  - host: pttg-ip-gt-ui-dev.notprod.homeoffice.gov.uk
+    http:
+      paths:
+      - backend:
+          serviceName: pttg-ip-gt-ui
+          servicePort: 443
+        path: /
+  - host: www.pttg-ip-gt-ui-dev.notprod.homeoffice.gov.uk
+    http:
+      paths:
+      - backend:
+          serviceName: pttg-ip-gt-ui
+          servicePort: 443
+        path: /
+  tls:
+  - hosts:
+    - pttg-ip-gt-ui-dev.notprod.homeoffice.gov.uk
+    - www.pttg-ip-gt-ui-dev.notprod.homeoffice.gov.uk
+    secretName: letsencrypt-pttg-ip-gt-ui
