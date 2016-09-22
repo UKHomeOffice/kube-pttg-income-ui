@@ -106,7 +106,7 @@ spec:
                 name: store-token
                 key: token
           - name: VAULT_PKI_PATH
-            value: services/pt-i-dev/pki
+            value: services/pt-i-{{.ENVIRONMENT}}/pki
           - name: VAULT_ROLE_NAME
             value: default
           - name: SLEEP_FOREVER
