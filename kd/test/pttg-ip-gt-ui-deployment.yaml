@@ -133,6 +133,16 @@ spec:
         ports:
           - name: http
             containerPort: 8000
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: https
+            httpHeaders:
+              - name: X-probe
+                value: kubelet
+          initialDelaySeconds: 240
+          periodSeconds: 20
+          timeoutSeconds: 10
         imagePullPolicy: Always
         volumeMounts:
           - mountPath: /data
