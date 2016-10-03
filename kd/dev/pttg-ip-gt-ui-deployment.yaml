@@ -105,7 +105,7 @@ spec:
         image: quay.io/ukhomeofficedigital/pttg-ip-gt-ui:{{.VERSION}}
         env:
          - name: API_ROOT
-           value: "http://pttg-ip-api.pt-i-{{.ENVIRONMENT}}.svc.cluster.local"
+           value: "https://pttg-ip-api.pt-i-{{.ENVIRONMENT}}.svc.cluster.local"
         resources:
           limits:
             cpu: 200m
