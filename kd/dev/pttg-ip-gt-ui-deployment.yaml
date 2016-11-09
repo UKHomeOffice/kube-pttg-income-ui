@@ -106,10 +106,12 @@ spec:
         env:
          - name: API_ROOT
            value: "https://pttg-ip-api.pt-i-{{.ENVIRONMENT}}.svc.cluster.local"
+          - name: JAVA_OPTS
+            value: "-Xms512m -Xmx768m"
         resources:
           limits:
             cpu: 200m
-            memory: 1024Mi
+            memory: 2048Mi
           requests:
             cpu: 200m
             memory: 1024Mi
@@ -138,3 +140,22 @@ spec:
       - name: javapki
         emptyDir:
           medium: "Memory"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
