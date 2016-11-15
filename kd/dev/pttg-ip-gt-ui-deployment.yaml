@@ -151,14 +151,24 @@ spec:
             containerPort: 8000
         livenessProbe:
           httpGet:
-            path: /healthz
+            path: /ping
             port: http
             httpHeaders:
               - name: X-probe
                 value: kubelet
-          initialDelaySeconds: 240
+          initialDelaySeconds: 120
           periodSeconds: 20
           timeoutSeconds: 10
+        readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+              httpHeaders:
+                - name: X-probe
+                  value: kubelet
+            initialDelaySeconds: 120
+            periodSeconds: 20
+            timeoutSeconds: 10
         imagePullPolicy: Always
         volumeMounts:
           - mountPath: /data
